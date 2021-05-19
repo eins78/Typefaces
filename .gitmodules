@@ -4,11 +4,11 @@
 [submodule "Space Mono"]
 	path = Space Mono
 	url = https://github.com/googlefonts/spacemono
-[submodule "collections/libreFontList"]
-	path = collections/libreFontList
+[submodule "_collections/libreFontList"]
+	path = _collections/libreFontList
 	url = https://github.com/bjornmeansbear/libreFontList
-[submodule "collections/libreFontLibrary"]
-	path = collections/libreFontLibrary
+[submodule "_collections/libreFontLibrary"]
+	path = _collections/libreFontLibrary
 	url = https://github.com/bjornmeansbear/libreFontLibrary
 [submodule "Basteleur"]
 	path = Basteleur
