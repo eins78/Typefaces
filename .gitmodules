@@ -1,0 +1,27 @@
+[submodule "Syne"]
+	path = Syne
+	url = https://gitlab.com/bonjour-monde/fonderie/syne-typeface.git
+[submodule "Space Mono"]
+	path = Space Mono
+	url = https://github.com/googlefonts/spacemono
+[submodule "collections/libreFontList"]
+	path = collections/libreFontList
+	url = https://github.com/bjornmeansbear/libreFontList
+[submodule "collections/libreFontLibrary"]
+	path = collections/libreFontLibrary
+	url = https://github.com/bjornmeansbear/libreFontLibrary
+[submodule "Basteleur"]
+	path = Basteleur
+	url = https://gitlab.com/velvetyne/basteleur.git
+[submodule "Savate"]
+	path = Savate
+	url = https://github.com/CollectifWech/Savate
+[submodule "Compagnon"]
+	path = Compagnon
+	url = https://gitlab.com/velvetyne/compagnon
+[submodule "Happy Times at the IKOB New Game Plus Edition"]
+	path = Happy Times at the IKOB New Game Plus Edition
+	url = https://gitlab.com/velvetyne/Happy-Times-at-the-IKOB
+[submodule "EB Garamond/src-EB-Garamond"]
+	path = EB Garamond/src-EB-Garamond
+	url = https://github.com/georgd/EB-Garamond
