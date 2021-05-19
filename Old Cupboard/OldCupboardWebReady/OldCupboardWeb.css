@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Old Cupboard';
+    src: url('/fonts/OldCupboard.eot');
+    src: url('/fonts/OldCupboard.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/OldCupboard.woff2') format('woff2'),
+         url('/fonts/OldCupboard.woff') format('woff'),
+         url('/fonts/OldCupboard.ttf')  format('truetype'),
+         url('/fonts/OldCupboard.svg#Old Cupboard') format('svg');
+}

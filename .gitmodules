@@ -25,3 +25,15 @@
 [submodule "EB Garamond/src-EB-Garamond"]
 	path = EB Garamond/src-EB-Garamond
 	url = https://github.com/georgd/EB-Garamond
+[submodule "Helmet"]
+	path = Helmet
+	url = https://github.com/carlenlund/helmet
+[submodule "euripides"]
+	path = euripides
+	url = https://github.com/ny3t0/euripides-files
+[submodule "B612/src-B612"]
+	path = B612/src-B612
+	url = https://github.com/polarsys/b612
+[submodule "Inter"]
+	path = Inter
+	url = https://github.com/rsms/inter
