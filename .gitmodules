@@ -37,3 +37,12 @@
 [submodule "Inter"]
 	path = Inter
 	url = https://github.com/rsms/inter
+[submodule "Gotico-Antiqua"]
+	path = Gotico-Antiqua
+	url = https://github.com/anrt-type/GoticoAntiqua
+[submodule "Fraunces"]
+	path = Fraunces
+	url = https://github.com/undercasetype/Fraunces
+[submodule "BilboINC"]
+	path = BilboINC
+	url = https://github.com/velvetyne/BilboINC
