@@ -46,3 +46,6 @@
 [submodule "BilboINC"]
 	path = BilboINC
 	url = https://github.com/velvetyne/BilboINC
+[submodule "Tomorrow"]
+	path = Tomorrow
+	url = https://github.com/eins78/Tomorrow
