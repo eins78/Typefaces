@@ -49,3 +49,6 @@
 [submodule "Tomorrow"]
 	path = Tomorrow
 	url = https://github.com/eins78/Tomorrow
+[submodule "Anybody"]
+	path = Anybody
+	url = https://github.com/Etcetera-Type-Co/Anybody.git
