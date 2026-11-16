@@ -52,3 +52,39 @@
 [submodule "Anybody"]
 	path = Anybody
 	url = https://github.com/Etcetera-Type-Co/Anybody.git
+[submodule "Trispace"]
+	path = Trispace
+	url = https://github.com/Etcetera-Type-Co/Trispace.git
+[submodule "Tourney"]
+	path = Tourney
+	url = https://github.com/Etcetera-Type-Co/Tourney.git
+[submodule "Epilogue"]
+	path = Epilogue
+	url = https://github.com/Etcetera-Type-Co/Epilogue.git
+[submodule "Gluten"]
+	path = Gluten
+	url = https://github.com/Etcetera-Type-Co/Gluten.git
+[submodule "Departure Mono"]
+	path = Departure Mono
+	url = https://github.com/rektdeckard/departure-mono.git
+[submodule "Datatype"]
+	path = Datatype
+	url = https://github.com/franktisellano/datatype.git
+[submodule "Furifont"]
+	path = Furifont
+	url = https://github.com/antfu/furifont.git
+[submodule "Shantell Sans"]
+	path = Shantell Sans
+	url = https://github.com/arrowtype/shantell-sans.git
+[submodule "Atkinson Hyperlegible Next"]
+	path = Atkinson Hyperlegible Next
+	url = https://github.com/googlefonts/atkinson-hyperlegible-next.git
+[submodule "Chakra Petch"]
+	path = Chakra Petch
+	url = https://github.com/cadsondemak/chakra-petch.git
+[submodule "Azeret Mono"]
+	path = Azeret Mono
+	url = https://github.com/displaay/Azeret.git
+[submodule "Saira"]
+	path = Saira
+	url = https://github.com/Omnibus-Type/Saira.git
