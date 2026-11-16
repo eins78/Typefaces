@@ -88,3 +88,6 @@
 [submodule "Saira"]
 	path = Saira
 	url = https://github.com/Omnibus-Type/Saira.git
+[submodule "Allo"]
+	path = Allo
+	url = https://github.com/joshpuckett/allo.git
