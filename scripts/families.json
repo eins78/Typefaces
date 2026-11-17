@@ -1,6 +1,7 @@
 {
   "_comment": "One entry per family directory. 'files' are globs relative to 'dir'; shipped .woff2 files are copied as they are, TTF/OTF are converted to WOFF2 without subsetting or renaming. 'license_files' are copied next to the fonts.",
   "families": [
+    {"dir": "Allo", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/webfonts/AlloVariable*.woff2"]},
     {"dir": "Anybody", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/variable/*.woff2"]},
     {"dir": "Atkinson Hyperlegible Next", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/webfonts/*[[]wght].woff2"]},
     {"dir": "Azeret Mono", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/variable/*.ttf"]},
