@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Typefaces playground</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="playground.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-inner">
+      <a class="home" href="../">&larr; Typefaces</a>
+      <input id="sample" type="text" value="" placeholder="Type some sample text" aria-label="Sample text" autocomplete="off">
+      <label class="size">Size <input id="size" type="range" min="14" max="120" value="40"> <output id="size-out">40</output>px</label>
+      <input id="search" type="search" placeholder="Filter by name" aria-label="Filter by name" autocomplete="off">
+      <div class="filters" role="group" aria-label="Show">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="starred" aria-pressed="false">&#9733; Starred</button>
+        <button type="button" data-filter="ticked" aria-pressed="false">&#10003; Ticked</button>
+      </div>
+      <div class="picks">
+        <span id="count" aria-live="polite"></span>
+        <button type="button" id="copy">Copy list</button>
+        <button type="button" id="copy-link">Copy link</button>
+        <button type="button" id="clear">Clear picks</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <p id="status" class="status">Loading the list &hellip;</p>
+    <ol id="list" class="list"></ol>
+    <details class="skipped" id="skipped" hidden>
+      <summary>Left out</summary>
+      <ul></ul>
+    </details>
+  </main>
+
+  <script src="playground.js"></script>
+</body>
+</html>

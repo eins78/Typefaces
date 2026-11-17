@@ -1,0 +1,42 @@
+{
+  "_comment": "One entry per family directory. 'files' are globs relative to 'dir'; shipped .woff2 files are copied as they are, TTF/OTF are converted to WOFF2 without subsetting or renaming. 'license_files' are copied next to the fonts.",
+  "families": [
+    {"dir": "Allo", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/webfonts/AlloVariable*.woff2"]},
+    {"dir": "Anybody", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/variable/*.woff2"]},
+    {"dir": "Atkinson Hyperlegible Next", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/webfonts/*[[]wght].woff2"]},
+    {"dir": "Azeret Mono", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/variable/*.ttf"]},
+    {"dir": "B612", "license": "OFL-1.1", "license_files": ["dist/B612/OFL.txt"], "files": ["dist/B612/*.ttf", "dist/B612_Mono/*.ttf"]},
+    {"dir": "Basteleur", "license": "OFL-1.1", "license_files": ["LICENSE.txt"], "files": ["fonts/webfonts/*.woff2"]},
+    {"dir": "Chakra Petch", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/*.woff2"]},
+    {"dir": "Compagnon", "license": "OFL-1.1", "license_files": ["LICENSE.txt"], "files": ["fonts/webfonts/*.woff2"]},
+    {"dir": "Datatype", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/variable/*.woff2"]},
+    {"dir": "Departure Mono", "license": "MIT", "license_files": ["LICENSE"], "files": ["public/assets/DepartureMono-Regular.woff2"]},
+    {"dir": "EB Garamond", "license": "OFL-1.1", "license_files": ["dist/EBGaramond-0.016/COPYING"], "files": ["dist/EBGaramond-0.016/ttf/*.ttf"]},
+    {"dir": "Epilogue", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/webfonts/*[[]slnt,wght].woff2"]},
+    {"dir": "Fraunces", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/web/*.woff2"]},
+    {"dir": "Gluten", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/variable/*.ttf"]},
+    {"dir": "Gotico-Antiqua", "license": "OFL-1.1", "license_files": ["LICENSE.txt"], "files": ["fonts/*.otf"]},
+    {"dir": "Happy Times at the IKOB New Game Plus Edition", "license": "OFL-1.1", "license_files": ["LICENSE.txt"], "files": ["fonts/webfonts/*.woff2"]},
+    {"dir": "Helmet", "license": "OFL-1.1", "license_files": ["LICENSE"], "files": ["Helmet-Regular.ttf", "HelmetNeue-Regular.otf"]},
+    {"dir": "iA-Fonts", "license": "OFL-1.1", "license_files": ["dist/iA-Writer-Mono/LICENSE.md"], "files": ["dist/*/*.ttf"]},
+    {"dir": "Inter", "license": "OFL-1.1", "license_files": ["LICENSE.txt"], "files": ["docs/font-files/Inter-roman.var.woff2", "docs/font-files/Inter-italic.var.woff2", "docs/font-files/InterDisplay-roman.var.woff2", "docs/font-files/InterDisplay-italic.var.woff2"]},
+    {"dir": "IoskeleyMono", "license": "OFL-1.1", "license_files": ["dist/IoskeleyMono-Normal/OFL.txt"], "files": ["dist/IoskeleyMono-Normal/*.ttf"]},
+    {"dir": "Old Cupboard", "license": "OFL-1.1", "license_files": ["OldCupboard/OFL.txt"], "files": ["OldCupboardWebReady/OldCupboard.woff2"]},
+    {"dir": "Saira", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["Saira/fonts/variable/*.ttf"]},
+    {"dir": "Savate", "license": "MIT", "license_files": ["license.md"], "files": ["web/*.woff2"]},
+    {"dir": "Shantell Sans", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/shantell_sans-for-googlefonts/*.ttf"]},
+    {"dir": "Space Mono", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/*.ttf"]},
+    {"dir": "Syne", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/webfonts/*.woff2"]},
+    {"dir": "Tomorrow", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["output/*.ttf"]},
+    {"dir": "Tourney", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/variable/*.ttf"]},
+    {"dir": "Trispace", "license": "OFL-1.1", "license_files": ["OFL.txt"], "files": ["fonts/variable/*.woff2"]}
+  ],
+  "skipped": [
+    {"dir": "BilboINC", "reason": "Licence is CC BY-NC-SA (non-commercial). Not an open font licence; left out of the public site."},
+    {"dir": "euripides", "reason": "Velvetyne Fellowship License: \"You cannot make the files public.\" Cannot be served from a public site."},
+    {"dir": "Boeticher", "reason": "No licence file in the repo (README only names Velvetyne). Left out until the licence is confirmed."},
+    {"dir": "Grotesk", "reason": "No licence file in the repo (README only names Velvetyne). Left out until the licence is confirmed."},
+    {"dir": "Infini", "reason": "No licence file in the repo (CNAP commission, no licence text). Left out until the licence is confirmed."},
+    {"dir": "Furifont", "reason": "Ships no font binaries: it is a compiler that turns another font into a furigana font (only test fixtures in the tree). MIT and OFL otherwise."}
+  ]
+}
