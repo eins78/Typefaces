@@ -8,7 +8,8 @@
   var els = {
     sample: $("sample"), size: $("size"), sizeOut: $("size-out"), search: $("search"),
     list: $("list"), status: $("status"), count: $("count"), skipped: $("skipped"),
-    copy: $("copy"), copyLink: $("copy-link"), clear: $("clear")
+    copy: $("copy"), copyLink: $("copy-link"), clear: $("clear"),
+    tools: $("tools"), toolsToggle: $("tools-toggle"), toolsBadge: $("tools-badge")
   };
 
   // ---- state (localStorage, mirrored to the URL hash) ----
@@ -220,6 +221,9 @@
       if (ok) shown++;
     });
     els.status.textContent = shown ? "" : "Nothing to show.";
+    var picks = state.starred.length + state.ticked.length;
+    els.toolsBadge.textContent = String(picks);
+    els.toolsBadge.hidden = !picks;
     els.count.textContent = state.starred.length + " starred, " + state.ticked.length + " ticked · " + shown + " of " + rows.length + " shown";
   }
 
@@ -291,6 +295,12 @@
 
     els.sample.addEventListener("input", function () { state.sample = els.sample.value; storageSet(); renderSamples(); });
     els.size.addEventListener("input", function () { state.size = +els.size.value; els.sizeOut.textContent = state.size; storageSet(); renderSamples(); });
+    function setTools(open) {
+      els.tools.classList.toggle("open", open);
+      els.toolsToggle.setAttribute("aria-expanded", String(open));
+    }
+    els.toolsToggle.addEventListener("click", function () { setTools(!els.tools.classList.contains("open")); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") setTools(false); });
     els.search.addEventListener("input", function () { query = els.search.value; applyFilters(); });
     document.querySelectorAll("[data-filter]").forEach(function (b) {
       b.addEventListener("click", function () {
