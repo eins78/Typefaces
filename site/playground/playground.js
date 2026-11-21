@@ -230,7 +230,7 @@
     var row = { family: family, loaded: {}, face: defaultFace(family), axisValues: {} };
     row.defaultFace = row.face;
 
-    var tick = el("input", { type: "checkbox", "aria-label": "Tick " + family.name });
+    var tick = el("button", { type: "button", class: "tick", "aria-label": "Tick " + family.name, title: "Tick", text: "\u2713" });
     var star = el("button", { type: "button", class: "star", "aria-label": "Star " + family.name, title: "Star" , text: "★" });
     var licenseFile = family.license.files[0];
     var meta = el("div", { class: "meta" }, [
@@ -243,7 +243,7 @@
     meta.appendChild(links);
     meta.appendChild(lic);
 
-    var marks = el("div", { class: "marks" }, [el("label", {}, [tick, el("span", { text: "pick" })]), star]);
+    var marks = el("div", { class: "marks" }, [tick, star]);
     var sampleEl = el("p", { class: "sample", contenteditable: "false" });
 
     var li = el("li", { class: "row", "data-id": family.id, "data-state": "idle" }, [meta, marks, sampleEl]);
@@ -278,7 +278,7 @@
       li.appendChild(row.details);
     }
 
-    tick.addEventListener("change", function () { toggle(state.ticked, family.id); persist(); });
+    tick.addEventListener("click", function () { toggle(state.ticked, family.id); persist(); });
     star.addEventListener("click", function () { toggle(state.starred, family.id); persist(); });
 
     // Set the style and axis values (from a link). A row that is not on screen yet keeps loading lazily.
@@ -296,7 +296,9 @@
 
   function syncRow(row) {
     var id = row.family.id;
-    row.tick.checked = has(state.ticked, id);
+    var ticked = has(state.ticked, id);
+    row.tick.setAttribute("aria-pressed", String(ticked));
+    row.tick.title = ticked ? "Untick" : "Tick";
     var starred = has(state.starred, id);
     row.star.setAttribute("aria-pressed", String(starred));
     row.star.title = starred ? "Unstar" : "Star";
