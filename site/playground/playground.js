@@ -3,17 +3,19 @@
 
   var STORAGE_KEY = "typefaces-playground-v1";
   var DEFAULT_SAMPLE = "Sphinx of black quartz, judge my vow 0123456789";
+  var DEFAULT_SIZE = 40;
 
   var $ = function (id) { return document.getElementById(id); };
   var els = {
     sample: $("sample"), size: $("size"), sizeOut: $("size-out"), search: $("search"),
     list: $("list"), status: $("status"), count: $("count"), skipped: $("skipped"),
-    copy: $("copy"), copyLink: $("copy-link"), clear: $("clear")
+    copy: $("copy"), copyLink: $("copy-link"), clear: $("clear"),
+    tools: $("tools"), toolsToggle: $("tools-toggle"), toolsBadge: $("tools-badge")
   };
 
-  // ---- state (localStorage, mirrored to the URL hash) ----
+  // ---- state (localStorage for picks, sample and size; the whole view in the URL hash) ----
 
-  var state = { ticked: [], starred: [], sample: DEFAULT_SAMPLE, size: 40 };
+  var state = { ticked: [], starred: [], sample: DEFAULT_SAMPLE, size: DEFAULT_SIZE };
   var filter = "all";
   var query = "";
 
@@ -24,26 +26,97 @@
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage blocked */ }
   }
 
+  // The whole view lives in the URL hash, so a link reproduces it:
+  //   t, s  ticked / starred font ids        q  sample text      z  size
+  //   n     name filter                      v  view (starred or ticked; absent = all)
+  //   x     style and axes: id:face[:tag@value;tag@value],...   (only what differs from the defaults)
+  //   o     ids of the open "Style and axes" panels
+  // Absent keys mean the default. A link with any of these keys wins over what is saved locally.
+  var HASH_KEYS = ["t", "s", "q", "z", "n", "v", "x", "o"];
+
+  function enc(text) {
+    return encodeURIComponent(text).replace(/%2C/g, ",").replace(/%3A/g, ":").replace(/%3B/g, ";").replace(/%40/g, "@");
+  }
+
   function parseHash() {
-    var out = null;
-    try {
-      var p = new URLSearchParams(location.hash.slice(1));
-      if (p.has("t") || p.has("s")) {
-        out = {
-          ticked: (p.get("t") || "").split(",").filter(Boolean),
-          starred: (p.get("s") || "").split(",").filter(Boolean)
-        };
-      }
-    } catch (e) { /* ignore a broken hash */ }
-    return out;
+    var out = {}, any = false;
+    location.hash.slice(1).split("&").forEach(function (pair) {
+      var i = pair.indexOf("=");
+      if (i < 1) return;
+      var key = pair.slice(0, i);
+      if (HASH_KEYS.indexOf(key) === -1) return;
+      try { out[key] = decodeURIComponent(pair.slice(i + 1)); any = true; } catch (e) { /* ignore a broken value */ }
+    });
+    return any ? out : null;
+  }
+
+  function list(text) { return (text || "").split(",").filter(Boolean); }
+
+  function tweaksToHash() {
+    return rows.map(function (row) {
+      var face = row.family.faces[row.face];
+      var axes = face.axes.filter(function (a) { return row.axisValues[a.tag] != null && row.axisValues[a.tag] !== a.default; })
+        .map(function (a) { return a.tag + "@" + row.axisValues[a.tag]; });
+      if (row.face === row.defaultFace && !axes.length) return null;
+      return row.family.id + ":" + row.face + (axes.length ? ":" + axes.join(";") : "");
+    }).filter(Boolean);
+  }
+
+  function hashString() {
+    var parts = [];
+    function add(key, value) { parts.push(key + "=" + enc(value)); }
+    if (state.ticked.length) add("t", state.ticked.join(","));
+    if (state.starred.length) add("s", state.starred.join(","));
+    if (state.sample !== DEFAULT_SAMPLE) add("q", state.sample);
+    if (state.size !== DEFAULT_SIZE) add("z", String(state.size));
+    if (query) add("n", query);
+    if (filter !== "all") add("v", filter);
+    var tweaks = tweaksToHash();
+    if (tweaks.length) add("x", tweaks.join(","));
+    var open = rows.filter(function (r) { return r.details && r.details.open; }).map(function (r) { return r.family.id; });
+    if (open.length) add("o", open.join(","));
+    return parts.join("&");
   }
 
   function writeHash() {
-    var p = new URLSearchParams();
-    if (state.ticked.length) p.set("t", state.ticked.join(","));
-    if (state.starred.length) p.set("s", state.starred.join(","));
-    var hash = p.toString().replace(/%2C/g, ",");
+    var hash = hashString();
     try { history.replaceState(null, "", location.pathname + location.search + (hash ? "#" + hash : "")); } catch (e) { /* ignore */ }
+  }
+
+  function applyTweaks(text) {
+    var wanted = {};
+    list(text).forEach(function (entry) {
+      var bits = entry.split(":");
+      var axes = {};
+      (bits[2] || "").split(";").forEach(function (pair) {
+        var kv = pair.split("@");
+        if (kv[0] && isFinite(parseFloat(kv[1]))) axes[kv[0]] = parseFloat(kv[1]);
+      });
+      wanted[bits[0]] = { face: parseInt(bits[1], 10), axes: axes };
+    });
+    rows.forEach(function (row) {
+      var w = wanted[row.family.id];
+      var face = w && w.face >= 0 && w.face < row.family.faces.length ? w.face : row.defaultFace;
+      var values = {};
+      row.family.faces[face].axes.forEach(function (a) {
+        if (w && w.axes[a.tag] != null) values[a.tag] = Math.min(Math.max(w.axes[a.tag], a.min), a.max);
+      });
+      row.setStyle(face, values);
+    });
+  }
+
+  function applyHash(h) {
+    state.ticked = list(h.t);
+    state.starred = list(h.s);
+    state.sample = h.q != null ? h.q : DEFAULT_SAMPLE;
+    state.size = Math.min(Math.max(parseInt(h.z, 10) || DEFAULT_SIZE, 14), 120);
+    query = h.n || "";
+    filter = h.v === "starred" || h.v === "ticked" ? h.v : "all";
+    if (rows.length) {
+      applyTweaks(h.x);
+      var open = list(h.o);
+      rows.forEach(function (row) { if (row.details) row.details.open = open.indexOf(row.family.id) !== -1; });
+    }
   }
 
   function loadState() {
@@ -54,8 +127,14 @@
       state.ticked = Array.isArray(saved.ticked) ? saved.ticked : [];
       state.starred = Array.isArray(saved.starred) ? saved.starred : [];
     }
-    var fromHash = parseHash(); // a shared link wins over the saved picks
-    if (fromHash) { state.ticked = fromHash.ticked; state.starred = fromHash.starred; }
+  }
+
+  function syncControls() {
+    els.sample.value = state.sample;
+    els.size.value = state.size;
+    els.sizeOut.textContent = state.size;
+    els.search.value = query;
+    document.querySelectorAll("[data-filter]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.filter === filter)); });
   }
 
   function has(list, id) { return list.indexOf(id) !== -1; }
@@ -149,8 +228,9 @@
 
   function buildRow(family) {
     var row = { family: family, loaded: {}, face: defaultFace(family), axisValues: {} };
+    row.defaultFace = row.face;
 
-    var tick = el("input", { type: "checkbox", "aria-label": "Tick " + family.name });
+    var tick = el("button", { type: "button", class: "tick", "aria-label": "Tick " + family.name, title: "Tick", text: "\u2713" });
     var star = el("button", { type: "button", class: "star", "aria-label": "Star " + family.name, title: "Star" , text: "★" });
     var licenseFile = family.license.files[0];
     var meta = el("div", { class: "meta" }, [
@@ -163,7 +243,7 @@
     meta.appendChild(links);
     meta.appendChild(lic);
 
-    var marks = el("div", { class: "marks" }, [el("label", {}, [tick, el("span", { text: "pick" })]), star]);
+    var marks = el("div", { class: "marks" }, [tick, star]);
     var sampleEl = el("p", { class: "sample", contenteditable: "false" });
 
     var li = el("li", { class: "row", "data-id": family.id, "data-state": "idle" }, [meta, marks, sampleEl]);
@@ -175,7 +255,8 @@
         var select = el("select", { "aria-label": "Style of " + family.name });
         family.faces.forEach(function (f, i) { select.appendChild(el("option", { value: String(i), text: faceLabel(f) })); });
         select.value = String(row.face);
-        select.addEventListener("change", function () { row.axisValues = {}; loadFace(row, +select.value); renderAxes(); });
+        select.addEventListener("change", function () { row.axisValues = {}; loadFace(row, +select.value); renderAxes(); writeHash(); });
+        row.select = select;
         controls.appendChild(el("label", {}, [el("span", { text: "Style" }), select]));
       }
       var axesBox = el("span", { class: "axes" });
@@ -186,16 +267,28 @@
           if (a.min === a.max) return;
           var input = el("input", { type: "range", min: a.min, max: a.max, step: (a.max - a.min) > 20 ? 1 : 0.01, value: row.axisValues[a.tag] != null ? row.axisValues[a.tag] : a.default });
           var out = el("output", { text: String(input.value) });
-          input.addEventListener("input", function () { row.axisValues[a.tag] = +input.value; out.textContent = input.value; applyFace(row); });
+          input.addEventListener("input", function () { row.axisValues[a.tag] = +input.value; out.textContent = input.value; applyFace(row); writeHash(); });
           axesBox.appendChild(el("label", {}, [el("span", { text: a.name }), input, out]));
         });
       };
       renderAxes();
-      li.appendChild(el("details", { class: "tweak" }, [el("summary", { text: "Style and axes" }), controls]));
+      row.details = el("details", { class: "tweak" }, [el("summary", { text: "Style and axes" }), controls]);
+      row.details.addEventListener("toggle", writeHash);
+      row.renderAxes = renderAxes;
+      li.appendChild(row.details);
     }
 
-    tick.addEventListener("change", function () { toggle(state.ticked, family.id); persist(); });
+    tick.addEventListener("click", function () { toggle(state.ticked, family.id); persist(); });
     star.addEventListener("click", function () { toggle(state.starred, family.id); persist(); });
+
+    // Set the style and axis values (from a link). A row that is not on screen yet keeps loading lazily.
+    row.setStyle = function (face, values) {
+      row.face = face;
+      row.axisValues = values;
+      if (row.select) row.select.value = String(face);
+      if (row.renderAxes) row.renderAxes();
+      if (row.el.dataset.state === "idle") applyFace(row); else loadFace(row, face);
+    };
 
     row.el = li; row.tick = tick; row.star = star; row.sampleEl = sampleEl;
     return row;
@@ -203,7 +296,9 @@
 
   function syncRow(row) {
     var id = row.family.id;
-    row.tick.checked = has(state.ticked, id);
+    var ticked = has(state.ticked, id);
+    row.tick.setAttribute("aria-pressed", String(ticked));
+    row.tick.title = ticked ? "Untick" : "Tick";
     var starred = has(state.starred, id);
     row.star.setAttribute("aria-pressed", String(starred));
     row.star.title = starred ? "Unstar" : "Star";
@@ -220,6 +315,9 @@
       if (ok) shown++;
     });
     els.status.textContent = shown ? "" : "Nothing to show.";
+    var picks = state.starred.length + state.ticked.length;
+    els.toolsBadge.textContent = String(picks);
+    els.toolsBadge.hidden = !picks;
     els.count.textContent = state.starred.length + " starred, " + state.ticked.length + " ticked · " + shown + " of " + rows.length + " shown";
   }
 
@@ -268,9 +366,6 @@
 
   function init(manifest) {
     loadState();
-    els.sample.value = state.sample;
-    els.size.value = state.size;
-    els.sizeOut.textContent = state.size;
 
     manifest.families.forEach(function (family) {
       var row = buildRow(family);
@@ -280,6 +375,10 @@
       syncRow(row);
       if (observer) observer.observe(row.el); else loadFace(row, row.face);
     });
+    var fromHash = parseHash();
+    if (fromHash) applyHash(fromHash);
+    syncControls();
+    rows.forEach(syncRow);
     renderSamples();
     applyFilters();
 
@@ -289,13 +388,20 @@
       els.skipped.hidden = false;
     }
 
-    els.sample.addEventListener("input", function () { state.sample = els.sample.value; storageSet(); renderSamples(); });
-    els.size.addEventListener("input", function () { state.size = +els.size.value; els.sizeOut.textContent = state.size; storageSet(); renderSamples(); });
-    els.search.addEventListener("input", function () { query = els.search.value; applyFilters(); });
+    els.sample.addEventListener("input", function () { state.sample = els.sample.value; storageSet(); writeHash(); renderSamples(); });
+    els.size.addEventListener("input", function () { state.size = +els.size.value; els.sizeOut.textContent = state.size; storageSet(); writeHash(); renderSamples(); });
+    function setTools(open) {
+      els.tools.classList.toggle("open", open);
+      els.toolsToggle.setAttribute("aria-expanded", String(open));
+    }
+    els.toolsToggle.addEventListener("click", function () { setTools(!els.tools.classList.contains("open")); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") setTools(false); });
+    els.search.addEventListener("input", function () { query = els.search.value; writeHash(); applyFilters(); });
     document.querySelectorAll("[data-filter]").forEach(function (b) {
       b.addEventListener("click", function () {
         filter = b.dataset.filter;
         document.querySelectorAll("[data-filter]").forEach(function (o) { o.setAttribute("aria-pressed", String(o === b)); });
+        writeHash();
         applyFilters();
       });
     });
@@ -307,7 +413,7 @@
     });
     window.addEventListener("hashchange", function () {
       var h = parseHash();
-      if (h) { state.ticked = h.ticked; state.starred = h.starred; storageSet(); rows.forEach(syncRow); applyFilters(); }
+      if (h) { applyHash(h); storageSet(); syncControls(); rows.forEach(syncRow); renderSamples(); applyFilters(); }
     });
     writeHash();
   }

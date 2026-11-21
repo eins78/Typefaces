@@ -11,20 +11,23 @@
 <body>
   <header class="bar">
     <div class="bar-inner">
-      <a class="home" href="../">&larr; Typefaces</a>
+      <a class="home" href="../" aria-label="Typefaces home">&larr;<span class="home-text"> Typefaces</span></a>
       <input id="sample" type="text" value="" placeholder="Type some sample text" aria-label="Sample text" autocomplete="off">
-      <label class="size">Size <input id="size" type="range" min="14" max="120" value="40"> <output id="size-out">40</output>px</label>
-      <input id="search" type="search" placeholder="Filter by name" aria-label="Filter by name" autocomplete="off">
-      <div class="filters" role="group" aria-label="Show">
-        <button type="button" data-filter="all" aria-pressed="true">All</button>
-        <button type="button" data-filter="starred" aria-pressed="false">&#9733; Starred</button>
-        <button type="button" data-filter="ticked" aria-pressed="false">&#10003; Ticked</button>
-      </div>
-      <div class="picks">
-        <span id="count" aria-live="polite"></span>
-        <button type="button" id="copy">Copy list</button>
-        <button type="button" id="copy-link">Copy link</button>
-        <button type="button" id="clear">Clear picks</button>
+      <button type="button" id="tools-toggle" class="tools-toggle" aria-expanded="false" aria-controls="tools">Tools <span id="tools-badge" class="tools-badge" hidden></span></button>
+      <div id="tools" class="tools">
+        <label class="size">Size <input id="size" type="range" min="14" max="120" value="40"> <output id="size-out">40</output>px</label>
+        <input id="search" type="search" placeholder="Filter by name" aria-label="Filter by name" autocomplete="off">
+        <div class="filters" role="group" aria-label="Show">
+          <button type="button" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" data-filter="starred" aria-pressed="false">&#9733; Starred</button>
+          <button type="button" data-filter="ticked" aria-pressed="false">&#10003; Ticked</button>
+        </div>
+        <div class="picks">
+          <span id="count" aria-live="polite"></span>
+          <button type="button" id="copy">Copy list</button>
+          <button type="button" id="copy-link">Copy link</button>
+          <button type="button" id="clear">Clear picks</button>
+        </div>
       </div>
     </div>
   </header>

@@ -1,6 +1,7 @@
 .bar {
   position: sticky;
   top: 0;
+  /* the phone tools panel is positioned against the bar */
   z-index: 2;
   background: var(--bg);
   border-bottom: 1px solid var(--line);
@@ -75,11 +76,10 @@ main { max-width: 70rem; margin: 0 auto; padding: 0 1rem 4rem; }
   font-size: .75rem;
 }
 
-.marks { display: flex; align-items: center; gap: .5rem; }
-.marks label { display: inline-flex; align-items: center; gap: .3rem; font-size: .85rem; cursor: pointer; }
-.marks input { width: 1.1rem; height: 1.1rem; accent-color: var(--accent); cursor: pointer; }
-.row .star { font-size: 1.15rem; line-height: 1; padding: .2rem .45rem; color: var(--muted); }
+.marks { display: flex; align-items: center; gap: .4rem; }
+.row .star, .row .tick { font-size: 1.15rem; line-height: 1; width: 2.2rem; height: 2.2rem; padding: 0; color: var(--muted); }
 .row .star[aria-pressed="true"] { color: var(--star); border-color: var(--star); }
+.row .tick[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
 
 .sample {
   grid-column: 1 / -1;
@@ -102,7 +102,45 @@ main { max-width: 70rem; margin: 0 auto; padding: 0 1rem 4rem; }
 .skipped { margin-top: 2rem; color: var(--muted); font-size: .9rem; }
 .skipped summary { cursor: pointer; }
 
+/* Desktop: the tools sit in the bar's flex row; the toggle is not needed. */
+.tools { display: contents; }
+.tools-toggle { display: none; }
+.tools-badge {
+  display: inline-block;
+  min-width: 1.2em;
+  padding: 0 .3em;
+  border-radius: 99px;
+  background: var(--star);
+  color: #1b1b1a;
+  font-size: .75rem;
+  text-align: center;
+}
+
+/* Phone: one slim row (back, sample text, Tools). The rest opens on demand. */
 @media (max-width: 640px) {
+  .bar-inner { padding: .5rem .75rem; gap: .5rem; flex-wrap: nowrap; }
+  .home-text { display: none; }
+  .home { font-size: 1.2rem; padding: 0 .2rem; }
+  #sample { flex: 1 1 auto; min-width: 0; }
+  .tools-toggle { display: inline-flex; align-items: center; gap: .35rem; white-space: nowrap; }
+  .tools {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .6rem;
+    padding: .75rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 8px 16px rgb(0 0 0 / .25);
+  }
+  .tools.open { display: flex; }
   .picks { margin-left: 0; }
+  .size input { flex: 1; width: auto; }
   #search { width: 100%; }
 }
